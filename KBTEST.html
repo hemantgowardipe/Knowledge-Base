@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Knowledge Base</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet"
+        href="https://appai.quickappflow.com/Attachment/downloadfile?fileUrl=Pages1%2Fglobal_73881b49-3ee0-4fc4-bde0-9dcd0f4392cd.css" />
+    <link rel="stylesheet"
+        href="https://appai.quickappflow.com/Attachment/downloadfile?fileUrl=Pages1%2Fknowledgebase_42778848-ff6c-4e6d-a492-59be84927ec5.css" />
+</head>
+
+<body>
+    <aside class="qaf-navdock" aria-label="Primary navigation"> <button type="button"
+            class="qaf-navdock__arrow-indicator" id="qafNavToggle" aria-expanded="false" aria-controls="qafNavdockList"
+            title="Expand or collapse navigation"> <i class="fa fa-angle-right" aria-hidden="true"></i> </button>
+        <nav class="qaf-navdock__list" id="qafNavdockList" aria-label="Application pages"></nav>
+    </aside>
+    <div class="portal-hero"> <img id="portalBackgroundImage"
+            src="https://appai.quickappflow.com/Attachment/downloadfile?fileUrl=Pages1%2Fsearchpage_logo_c8a4df0d-5c48-4eef-8b0c-047647c5e000.png"
+            alt="Search banner" />
+        <div class="portal-hero__search-overlay">
+            <div class="portal-hero__search-spacer" aria-hidden="true"></div>
+            <div class="search-hero__controls">
+                <div class="search-wrap"> <label class="kb-hero-search qaf-search" for="searchInput"> <i
+                            class="fa fa-search kb-hero-search__icon qaf-search__icon" aria-hidden="true"></i> <input type="text"
+                            id="searchInput" class="kb-hero-search__field qaf-search__field" placeholder="Search Articles"
+                            onkeydown="handleSearchInputKeydown(event)" oninput="toggleSearchClear()" autocomplete="off"
+                            aria-label="Search articles" /> <button type="button" id="searchClearBtn"
+                            class="kb-hero-search__clear qaf-search__clear qaf-search__clear--toggle" aria-label="Clear search" title="Clear search"
+                            onclick="clearSearchInput()">&times;</button> </label> </div>
+            </div>
+        </div>
+    </div>
+    <div class="app-shell">
+        <div class="topic-panel">
+            <div class="topic-panel-header" style="padding: 15px 0px;">
+                <h3>Topic</h3>
+                <button type="button" id="kbAddTopicBtn" class="kb-topic-add-btn qaf-cs-theme-btn qaf-cs-theme-btn--primary" title="Add Topic"
+                    aria-label="Add Topic" onclick="openAddTopicForm()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+            </div>
+            <div id="topicList"></div>
+        </div>
+        <div class="kb-main-panel">
+            <div class="kb-toolbar">
+                <h3>Solutions</h3>
+                <button type="button" id="kbAddSolutionBtn" class="kb-add-solution-btn qaf-cs-theme-btn qaf-cs-theme-btn--primary" title="Add Solution"
+                    onclick="openAddSolutionForm()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Solution
+                </button>
+            </div>
+            <div id="solutionsContainer"></div>
+        </div>
+    </div>
+    <script
+        src="https://appai.quickappflow.com/Attachment/downloadfile?fileUrl=Pages1%2Fbundle_22f702de-9b56-416c-b2e9-9282a3f75504.js"></script>
+    <script
+        src="https://appai.quickappflow.com/Attachment/downloadfile?fileUrl=Pages1%2FITSM_nav_dock_49dcdb44-f0ef-4eb2-875f-224562749708.js"></script>
+    <script
+        src="https://appai.quickappflow.com/Attachment/downloadfile?fileUrl=Pages1%2Fknowledgebase_7df8ff84-9664-45bd-99b2-2bd15fe20b7f.js"></script>
+    <script src="https://appai.quickappflow.com/Attachment/downloadfile?fileUrl=Pages1%2Flibrary_7d096b60-9a9a-4ec4-9b6f-9085f0929277.js"></script>
+</body>
+
+</html>

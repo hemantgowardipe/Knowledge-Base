@@ -1,0 +1,825 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    /* Scrollbar styling */
+    scrollbar-width: thin;
+    scrollbar-color: #a9a9a9 transparent;
+  }
+  
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  
+  /* Nav dock sub-menu helpers (global.css covers main dock; used when items have subMenus). */
+  .qaf-navdock__submenu {
+    overflow: hidden;
+  }
+  
+  .qaf-navdock__sublink {
+    padding-left: 28px;
+  }
+  
+  .qaf-navdock__chevron {
+    margin-left: auto;
+    font-size: 12px !important;
+    transition: transform var(--duration-base) var(--ease-standard);
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+  }
+  
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 5px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #a9a9a9;
+    border-radius: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    border-radius: 8px;
+  }
+  
+  :root {
+    --separator: #eaeaea;
+    /* Shared with .topic-panel + .kb-main-panel so hero search lines up everywhere (local + portal). */
+    --kb-topic-inner-w: 230px;
+    --kb-topic-pad-x: 15px;
+    --kb-topic-border-r: 1px;
+    --kb-topic-outer-w: calc(
+      var(--kb-topic-inner-w) + var(--kb-topic-pad-x) + var(--kb-topic-pad-x) +
+        var(--kb-topic-border-r)
+    );
+    --kb-main-pad-x: 20px;
+    /* Hero search: aligned with main column but not full-bleed to the right. */
+    --kb-hero-search-max-w: 330px;
+  }
+  
+  .app-shell {
+    display: flex;
+    align-items: stretch; /* keep existing layout behavior */
+    min-height: calc(100vh - 0px);
+    margin-top: 0;
+    padding-top: 0;
+  }
+  .topic-panel {
+    box-sizing: border-box;
+    flex-shrink: 0;
+    width: var(--kb-topic-outer-w);
+    background: #ffffff;
+    padding: 0 var(--kb-topic-pad-x);
+    border-right: var(--kb-topic-border-r) solid var(--separator);
+    height: auto;
+  }
+  .kb-main-panel {
+    box-sizing: border-box;
+    flex: 1;
+    min-width: 0;
+    padding: 0 var(--kb-main-pad-x) 20px;
+    overflow: visible;
+    height: auto;
+  }
+  
+  .portal-hero {
+    position: relative;
+    margin: 0;
+    border: 1px solid var(--separator);
+    overflow: hidden;
+    background: #f8f8f8;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  
+  .portal-hero img {
+    width: 100%;
+    height: clamp(120px, 24vw, 190px);
+    object-fit: cover;
+    display: block;
+    margin: 0;
+  }
+  
+  /* Same column split as .app-shell: topic width | main (flex). Search spans main column only. */
+  .portal-hero__search-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 18px;
+    display: grid;
+    grid-template-columns: var(--kb-topic-outer-w) minmax(0, 1fr);
+    align-items: end;
+    pointer-events: none;
+    box-sizing: border-box;
+  }
+  
+  .portal-hero__search-spacer {
+    min-width: 0;
+    pointer-events: none;
+  }
+  
+  .search-hero__controls {
+    position: static;
+    padding: 0 var(--kb-main-pad-x);
+    min-width: 0;
+    width: 100%;
+    pointer-events: auto;
+    box-sizing: border-box;
+  }
+  
+  .search-hero-form {
+    display: contents;
+  }
+  
+  .search-hero__controls .search-wrap {
+    display: flex;
+    width: 100%;
+    max-width: min(var(--kb-hero-search-max-w), 100%);
+    min-width: 0;
+  }
+  
+  /*
+   * Hero search bar visuals (border, height, icon, field, clear button) come
+   * from the shared .qaf-search component in global.css. Only the page-specific
+   * width is kept here; width/position also come from .search-wrap above.
+   */
+  .search-hero__controls .kb-hero-search {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+  
+  .topic-panel-header h3 {
+    font-size: 18px;
+    margin-left: 6px;
+    font-weight: normal;
+  }
+  .kb-topic-chip {
+    padding: 6px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    background: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #c8ccd4;
+    transition: all 0.2s ease-in-out;
+  }
+  .kb-topic-chip:hover {
+    background: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .kb-topic-chip--active {
+    background: #edf2ff;
+    border: 1px solid #9db2ee;
+    box-shadow: 0 2px 6px rgba(20, 30, 80, 0.16);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  
+  .kb-topic-chip__text {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .kb-topic-chip__clear {
+    width: 16px;
+    height: 16px;
+    line-height: 14px;
+    text-align: center;
+    border-radius: 50%;
+    color: #4b5d95;
+    border: 1px solid #b7c6f1;
+    background: #f7f9ff;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  
+  .kb-topic-chip__clear:hover {
+    background: #e8eeff;
+  }
+  
+  .kb-topic-chip--hint {
+    cursor: default;
+    font-size: 12px;
+    line-height: 1.35;
+    color: #666;
+    white-space: normal;
+  }
+  
+  #topicList {
+    background: #f8f8f8;
+    border-top: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 8px;
+    height: auto;
+    overflow: visible;
+  }
+  
+  .kb-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    position: sticky;
+    top: 0;
+    background: #ffffff;
+    z-index: 5;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--separator);
+  }
+  .kb-toolbar h3 {
+    font-size: 18px;
+    margin-left: 30px;
+    font-weight: normal;
+    margin: 0;
+  }
+  /* Solution card */
+  .solution {
+    margin-bottom: 12px;
+    position: relative;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    transition: all 0.2s ease-in-out;
+  }
+  .solution:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .solution a {
+    color: #009ce7;
+  }
+
+  /* Edit/Delete action icons: top-right of each solution card, revealed on hover only */
+  .solution-actions {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    display: flex;
+    gap: 6px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s ease-in-out;
+    z-index: 2;
+  }
+  .solution:hover .solution-actions {
+    opacity: 1;
+    visibility: visible;
+  }
+  .solution-action-btn {
+    width: 26px;
+    height: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: none;
+    background: #ffffff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+    cursor: pointer;
+    padding: 0;
+    font-size: 12px;
+    transition: background 0.15s ease-in-out, transform 0.15s ease-in-out;
+  }
+  .solution-action-btn:hover {
+    transform: scale(1.08);
+    background: #f5f5f5;
+  }
+  /* Edit icon default color; overridden dynamically by the CS_Setting theme below. */
+  .solution-action-btn--edit {
+    color: #009ce7;
+  }
+  /* Delete icon default color; overridden dynamically by the CS_Setting theme below. */
+  .solution-action-btn--delete {
+    color: #dc3545;
+  }
+  
+  .solution-card-title {
+    font-size: 15px;
+    font-weight: 300 !important;
+    margin-top: 0.25rem;
+    margin-bottom: 0.4rem;
+  }
+  
+  .solution-card-title a {
+    color: #009ce7;
+    text-decoration: none;
+    font-weight: 300 !important;
+  }
+  
+
+  
+  .solution-card-content {
+    margin: 0;
+  }
+  
+  .solution-card-content .solution-read-more {
+    display: inline;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  
+  .solution-card-content .solution-read-more:hover,
+  .solution-card-content .solution-read-more:focus {
+    text-decoration: none;
+  }
+  
+  .kb-status-badge {
+    background: #eaf9ee;
+    padding: 1px 3px;
+    border: 1px solid rgba(46, 125, 50, 0.35);
+    color: #2e7d32;
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: 5px;
+    font-size: 9px;
+  }
+  
+  .solution-badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  
+  .solution-badges .kb-status-badge {
+    margin-top: 0;
+    padding-top: 2px;
+  }
+  
+  .kb-status-badge.is-topic {
+    padding: 1px 3px;
+    background: #eaf9ee;
+    border: 1px solid rgba(46, 125, 50, 0.35);
+    color: #2e7d32;
+    border-radius: 4px;
+    display: inline-block;
+    font-size: 9px;
+  }
+  
+  .kb-status-badge.is-keyword {
+    padding: 1px 3px;
+    background: #fdecef;
+    border: 1px solid rgba(220, 53, 69, 0.35);
+    color: #721c24;
+    border-radius: 4px;
+    display: inline-block;
+    font-size: 9px;
+  }
+  
+  /* Restored earlier duplicate blocks (legacy order) */
+  .kb-dialog {
+    display: none;
+    position: fixed;
+    top: 10%;
+    left: 35%;
+    width: 320px;
+    background: white;
+    padding: 15px;
+    border: 1px solid var(--separator);
+  }
+  
+  .kb-dialog input,
+  .kb-dialog textarea,
+  .kb-dialog select {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .kb-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    margin-top: 0px;
+  }
+  
+  .right-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .search-box {
+    padding: 6px;
+    width: 250px;
+    border-radius: 5px;
+    border: 1px solid var(--separator);
+  }
+  
+  .topic-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* "+" add-topic button: small black circle with white plus, right-aligned with "Topic" heading */
+  .kb-topic-add-btn {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: none;
+    background: var(--color-accent-dark, #0f172a);
+    color: #ffffff;
+    font-size: 12px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+  }
+  .kb-topic-add-btn svg {
+    width: 12px;
+    height: 12px;
+    flex: none;
+  }
+  .kb-topic-add-btn:disabled,
+  .kb-topic-add-btn.is-disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: auto; /* keep title/tooltip working while blocking the click handler in JS */
+  }
+
+  /* "+ Solution" add-solution button, right-aligned with "Solutions" heading in .kb-toolbar */
+  .kb-add-solution-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    border-radius: 5px;
+    background: var(--color-accent-dark, #0f172a);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 400;
+    height: 30px;
+    padding: 0 8px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .kb-add-solution-btn svg {
+    width: 14px;
+    height: 14px;
+    flex: none;
+  }
+  .kb-add-solution-btn:disabled,
+  .kb-add-solution-btn.is-disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: auto;
+  }
+  
+  .kb-dialog {
+    display: none;
+    position: fixed;
+    top: 10%;
+    left: 35%;
+    width: 350px;
+    background: white;
+    padding: 20px;
+    border: 1px solid var(--separator);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  }
+  
+  .kb-dialog h4 {
+    margin: 0 0 15px 0;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  
+  .kb-dialog label {
+    margin-top: 8px;
+    font-size: 12px;
+  }
+  
+  .kb-dialog button {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .kb-dialog button:not(.save-btn):not(.close-btn):not(.danger-btn) {
+    background: #ccc;
+    color: #333;
+  }
+  
+  .kb-dialog input,
+  .kb-dialog textarea,
+  .kb-dialog select {
+    width: 100%;
+    margin-top: 3px;
+    margin-bottom: 8px;
+    padding: 6px;
+    font-size: 12px;
+  }
+  
+  .checkbox-group {
+    margin: 8px 0;
+  }
+  
+  .checkbox-group input {
+    margin-right: 5px;
+  }
+  
+  /* Buttons */
+  .kb-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .save-btn {
+    background: black;
+    color: white;
+    border: none;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-size: 12px;
+    border-radius: 5px;
+  }
+  
+  .close-btn {
+    background: #ccc;
+    border: none;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-size: 12px;
+    border-radius: 5px;
+  }
+  .kb-dialog {
+    display: none;
+    position: fixed;
+    top: 10%;
+    left: 35%;
+    width: 350px;
+    max-height: 80vh;
+    overflow-y: auto;
+  
+    background: white;
+    padding: 20px;
+    border: 1px solid var(--separator);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+    z-index: 1000;
+  }
+  .content-text {
+    margin: 5px 0 0;
+    line-height: 1.4;
+    word-break: break-word;
+  }
+  
+  /* Delete confirmation overlay (blurred background, centered dialog) */
+  .kb-dialog-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(6px);
+  }
+  
+  .kb-confirm-dialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 420px;
+    max-width: calc(100% - 32px);
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px 18px;
+    border: 1px solid var(--separator);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  }
+  
+  .kb-confirm-dialog h4 {
+    margin: 0 0 10px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  
+  .kb-confirm-dialog p {
+    margin: 0 0 16px;
+    color: #222;
+    font-size: 12px;
+  }
+  
+  .danger-btn {
+    background: #d32f2f;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 12px;
+  }
+  
+  .danger-btn:hover {
+    opacity: 0.95;
+  }
+  /* Universal form spacing */
+  .form-group {
+    margin-bottom: 10px;
+  }
+  
+  /* Universal checkbox alignment */
+  .checkbox-group {
+    display: flex;
+    align-items: center; /* vertical alignment fix */
+    gap: 8px; /* spacing between checkbox & text */
+  }
+  
+  /* Remove weird default spacing */
+  .checkbox-group input[type="checkbox"] {
+    margin: 0;
+    width: 14px;
+    height: 14px;
+  }
+  
+  /* Label alignment */
+  .checkbox-group label {
+    margin: 0;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .search-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-width: 0;
+  }
+  
+  body,
+  input,
+  textarea,
+  select,
+  button {
+    font-family: "Poppins", sans-serif;
+    font-size: 12px;
+  }
+  
+  /* Host-shell header spacing reset:
+     Some Angular container styles add extra bottom padding/margin in
+     `.page-title-box.pull-left`, which creates a visible gap above this page hero. */
+  .header-main .page-title-box.pull-left,
+  #topHeader .page-title-box.pull-left {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    min-height: 0 !important;
+  }
+  
+  .header-main,
+  #topHeader {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  
+  body > .portal-hero {
+    margin-top: 0 !important;
+  }
+  
+  /* Responsive-only overrides (desktop behavior unchanged) */
+  @media (max-width: 1024px) {
+    :root {
+      --kb-topic-inner-w: 200px;
+      --kb-main-pad-x: 14px;
+      --kb-hero-search-max-w: 420px;
+    }
+  
+    .portal-hero img {
+      height: clamp(110px, 22vw, 170px);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    :root {
+      --kb-topic-inner-w: clamp(110px, 32vw, 170px);
+      --kb-topic-pad-x: 10px;
+      --kb-topic-border-r: 1px;
+      --kb-main-pad-x: 10px;
+      --kb-hero-search-max-w: 100%;
+    }
+  
+    .portal-hero img {
+      height: clamp(100px, 20vw, 150px);
+    }
+  
+    .portal-hero__search-overlay {
+      grid-template-columns: var(--kb-topic-outer-w) minmax(0, 1fr);
+      bottom: 12px;
+    }
+  
+    .search-hero__controls {
+      padding: 0 10px;
+    }
+  
+    .app-shell {
+      display: flex;
+    }
+  
+    .topic-panel {
+      width: var(--kb-topic-outer-w);
+      border-right: var(--kb-topic-border-r) solid var(--separator);
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+  
+    .kb-main-panel {
+      width: auto;
+      padding: 0 10px 14px;
+    }
+  
+    .kb-toolbar {
+      position: sticky;
+      padding: 10px 0;
+    }
+  
+    .search-hero__controls .kb-hero-search {
+      width: 100%;
+      max-width: 100%;
+    }
+  
+    .solution {
+      padding: 12px 12px 12px 14px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    :root {
+      --kb-topic-inner-w: clamp(96px, 30vw, 130px);
+      --kb-main-pad-x: 8px;
+    }
+  
+    .portal-hero img {
+      height: clamp(92px, 19vw, 130px);
+    }
+  
+    .kb-toolbar h3,
+    .topic-panel-header h3 {
+      font-size: 16px;
+    }
+  
+    .solution-badges {
+      gap: 4px;
+    }
+  }
+  /* CS_SETTING dynamic button theme (mirrors the Status page's implementation
+     in status.css). Applies to Add Topic, Add Solution, and the Edit/Delete
+     icon buttons on each solution card. */
+  .qaf-cs-theme-host .qaf-cs-theme-btn--primary,
+  .qaf-cs-theme-host .qaf-cs-theme-btn--primary:hover,
+  .qaf-cs-theme-host .qaf-cs-theme-btn--primary:focus,
+  .qaf-cs-theme-host .qaf-cs-theme-btn--primary:active {
+    background-color: var(--ButtonBackGroundColor, #0f172a);
+    background: var(--ButtonBackGroundColor, #0f172a);
+    color: var(--ButtonTextColor, #ffffff);
+    border-color: var(--ButtonBackGroundColor, #0f172a);
+  }
+
+  .qaf-cs-theme-host .qaf-cs-theme-btn--primary:hover,
+  .qaf-cs-theme-host .qaf-cs-theme-btn--primary:focus-visible {
+    filter: brightness(1.08);
+  }
+
+  .qaf-cs-theme-host .qaf-cs-theme-btn--secondary,
+  .qaf-cs-theme-host .qaf-cs-theme-btn--secondary:hover,
+  .qaf-cs-theme-host .qaf-cs-theme-btn--secondary:focus,
+  .qaf-cs-theme-host .qaf-cs-theme-btn--secondary:active {
+    background-color: var(--ButtonBackGroundColor, #ffffff);
+    background: var(--ButtonBackGroundColor, #ffffff);
+    color: var(--ButtonTextColor, #111827);
+    border-color: var(--ButtonBackGroundColor, #ffffff);
+  }
+
+  .qaf-cs-theme-host .qaf-cs-theme-btn--secondary:hover,
+  .qaf-cs-theme-host .qaf-cs-theme-btn--secondary:focus-visible {
+    filter: brightness(0.96);
+  }
+
+  /* Edit/Delete icon buttons keep their original default color when no
+     CS_Setting text color is configured, but follow --ButtonTextColor once
+     the portal sets one. */
+  .qaf-cs-theme-host .solution-action-btn--edit.qaf-cs-theme-btn--secondary {
+    color: #009ce7;
+  }
+  .qaf-cs-theme-host .solution-action-btn--delete.qaf-cs-theme-btn--secondary {
+    color: var(--ButtonTextColor, #dc3545);
+  }
+
+  .qaf-cs-theme-host .qaf-cs-theme-btn .fa,
+  .qaf-cs-theme-host .qaf-cs-theme-btn svg {
+    color: inherit;
+    stroke: currentColor;
+  }
