@@ -261,26 +261,22 @@ function parseJsonSafely(raw) {
   }
 
   /**
-   * Keeps the "+" (Topic) and "+ Solution" buttons enabled only for users whose NewLP
-   * grants manage permission (see hasKbManagePermission()).
+   * Shows the "+" (Topic) and "+ Solution" buttons only for users whose NewLP
+   * grants manage permission (see hasKbManagePermission()); hidden otherwise.
    */
   function syncKbAddButtonStates() {
     const allowed = hasKbManagePermission();
 
     const topicBtn = document.getElementById("kbAddTopicBtn");
     if (topicBtn) {
-      topicBtn.disabled = !allowed;
-      topicBtn.classList.toggle("is-disabled", !allowed);
-      topicBtn.setAttribute("aria-disabled", String(!allowed));
-      topicBtn.title = allowed ? "Add Topic" : "You do not have permission to add topics.";
+      topicBtn.style.display = allowed ? "" : "none";
+      topicBtn.setAttribute("aria-hidden", String(!allowed));
     }
 
     const solutionBtn = document.getElementById("kbAddSolutionBtn");
     if (solutionBtn) {
-      solutionBtn.disabled = !allowed;
-      solutionBtn.classList.toggle("is-disabled", !allowed);
-      solutionBtn.setAttribute("aria-disabled", String(!allowed));
-      solutionBtn.title = allowed ? "Add Solution" : "You do not have permission to add solutions.";
+      solutionBtn.style.display = allowed ? "" : "none";
+      solutionBtn.setAttribute("aria-hidden", String(!allowed));
     }
   }
 
